@@ -1,18 +1,17 @@
 
-A brief justification for any key technical decisions made
+Technical decisions made
 ==========================================================
-We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache obejcts and time limit it set to 45mins.
+We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache objects and usually the time limit is set to 45mins.
 
 
 Description:
 ==============
-WordPress admin dashboard Weather Widget Plugins is uses https://api.openweathermap.org  API to fetch the Location and the Weather details.
-Plugins menu can be found in WordPress Settings Menu tab were the location can be changed.
+WordPress admin dashboard Weather Widget Plugins uses https://api.openweathermap.org API to fetch the location and the weather details. The Plugins menu can be found in the WordPress Settings Menu tab where the location can be changed.
 
-	1. To fetch the Geo information of the city or location entered /geo/1.0/direct 
+	1. To fetch the Geo information of the city or location, entered /geo/1.0/direct 
 	2. To fetch the Weather information of selected location /data/2.5/weather	
 	
-By Default the plugins show the Weather location of Brookvale, New South Wales, AU
+By default, the plugins show the weather location of Brookvale, New South Wales, AU.
 
 Openweathermap TEST API KEY: d99cd2f7c1c88f1a21f2b2e90a2ec2d5
 
@@ -27,4 +26,4 @@ Plugins Screen
 
 Time to Complete
 =================
-it takes about 3 Hours and 45 Mins
+It takes about 4 hours.
