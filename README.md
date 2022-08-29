@@ -1,7 +1,8 @@
 
 Technical decisions made
 ==========================================================
-We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache objects and usually the time limit is set to 45mins.
+We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache objects. Limited expiry time to 45 mins as mentioned
+
 
 
 Description:
