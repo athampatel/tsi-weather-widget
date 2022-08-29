@@ -28,11 +28,3 @@ Plugins Screen
 Time to Complete
 =================
 It takes about 4 hours.
-
-
-Demo
-=====
-https://tender.net/demo/wp-admin/index.php
-
-Username: admin_rcc7mcwn
-Password : Jnh~WjyR21tn_05!
