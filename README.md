@@ -10,6 +10,8 @@ A brief justification for any key technical decisions made
 We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache obejcts and time limit it set to 45mins.
 
 
+
+
 Description:
 ==============
 WordPress admin dashboard Weather Widget Plugins is uses https://api.openweathermap.org following API
