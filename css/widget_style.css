@@ -56,3 +56,8 @@
     color: #000;
     text-decoration: none;
 }
+.weather_temp{
+    display: flex;
+    flex-direction: column;
+    margin-top:10px;
+}

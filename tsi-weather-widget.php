@@ -60,7 +60,7 @@ Class CustomWeatherWidget{
 
 		$weather_info = get_transient( $key);
 		if($apiKey != '' && $lat != '' && $lan != '' && !$weather_info){
-			$url = 'https://api.openweathermap.org/data/2.5/weather?lat='.$lat.'&lon='.$lan.'&appid='.$apiKey;
+			$url = 'https://api.openweathermap.org/data/2.5/weather?lat='.$lat.'&lon='.$lan.'&units=metric&appid='.$apiKey;
 			$api_response = wp_remote_get($url);	
 			$weather_info = wp_remote_retrieve_body($api_response);			
 			if(!empty($weather_info)){				
@@ -85,6 +85,8 @@ Class CustomWeatherWidget{
 		if($_options != ''){
 			$_options = unserialize($_options);
 		}
+
+		
 		$location = isset($_options['locationName']) ? $_options['locationName'] : '';
 		if(!empty($weather)){
 			$content .= '<div class="weather_details">
@@ -94,7 +96,13 @@ Class CustomWeatherWidget{
 								<div class="weather_info">
 									<div class="weather_location">'.$location.'</div>
 										<div class="current_title">'.$_item['main'].', '.$_item['description'].'</div>
-									</div>
+										<div class="weather_temp">
+											<span class="temp"><strong>Temp :</strong> '.$main['temp'].' &#8451;</span>
+											<span class="feel_temp"><strong>Feels Like :</strong> '.$main['feels_like'].' &#8451;</span>
+											<span class="temp"><strong>Min :</strong> '.$main['temp_min'].' &#8451; - <strong>Max :</strong> '.$main['temp_max'].'</span>
+											<span class="humidity"><strong>Humidity :</strong> '.$main['humidity'].'%</span>
+										</div>
+									</div>									
 									<div class="weather_icon"><img src="http://openweathermap.org/img/w/'.$_item['icon'].'.png" /><a href="'.admin_url('/options-general.php?page=tsi-weather-widget').'">Change location</a></div></div>';
 				$content .= '</div>';
 			}			

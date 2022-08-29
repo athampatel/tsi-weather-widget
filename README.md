@@ -14,6 +14,7 @@ Plugins menu can be found in WordPress Settings Menu tab were the location can b
 	
 By Default the plugins show the Weather location of Brookvale, New South Wales, AU
 
+Openweathermap TEST API KEY: d99cd2f7c1c88f1a21f2b2e90a2ec2d5
 
 Plugins Screen
 ==============
