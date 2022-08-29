@@ -61,3 +61,7 @@
     flex-direction: column;
     margin-top:10px;
 }
+.location_results .notice{
+    margin: 0px;
+    padding: 15px;
+}

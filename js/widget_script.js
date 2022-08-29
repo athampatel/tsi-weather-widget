@@ -30,11 +30,11 @@ jQuery(document).ready(function($){
 				if(res.status == 1 && Object.method == 'fetch_location'){
 					 var locations = res.data;
 					 var _html = '';
-					 if(typeof locations.code != 'undefined' && locations.code == '401'){
-						_html = '<li><div class="notice notice-error">'+locations.message+'</div></li>';
+					 if(res.error == 1){
+						_html = '<li><div class="notice notice-error">'+res.message+'</div></li>';
 					 }else if(locations.length == 0){						 
 						_html = '<li><div class="notice notice-error">Invalid location or city name</div></li>';
-					 }else{						
+					 }else{
 						 jQuery.each(locations,function(key,location){
 							_html += '<li><a href="javascript:void(0)" class="location_item" data-lat="'+location.lat+'" data-lon="'+location.lon+'">'+location.name+', '+location.state+', '+location.country+'</a></li>';
 						 });

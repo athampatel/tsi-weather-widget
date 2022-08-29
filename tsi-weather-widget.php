@@ -43,7 +43,7 @@ Class CustomWeatherWidget{
 		wp_add_dashboard_widget('custom_help_widget', 'Weather Widget',array('CustomWeatherWidget','weather_widget'));
 	}
 
-	public static function get_weather_details(){
+	public static function get_weather_details($fetch = 0){
 		$_options = get_option('tsiwigdget_options');
 		if($_options != ''){
 			$_options = unserialize($_options);
@@ -58,7 +58,8 @@ Class CustomWeatherWidget{
 		
 		//Retrive cached weather details to avaoid multiple API calls
 
-		$weather_info = get_transient( $key);
+		$weather_info = ($fetch) ? 0 :  get_transient($key);
+
 		if($apiKey != '' && $lat != '' && $lan != '' && !$weather_info){
 			$url = 'https://api.openweathermap.org/data/2.5/weather?lat='.$lat.'&lon='.$lan.'&units=metric&appid='.$apiKey;
 			$api_response = wp_remote_get($url);	
@@ -110,7 +111,7 @@ Class CustomWeatherWidget{
 		echo $content;
 	}
 	public static function load_widget_info(){
-		$response = array('status' => 0,'html' => '', 'data' => '','message' => '');
+		$response = array('status' => 0,'html' => '', 'data' => '','message' => '','error' => 0);
 		$_data = $_REQUEST;
 		$method = $_data['method'];	
 		$_options = get_option('tsiwigdget_options');
@@ -120,16 +121,22 @@ Class CustomWeatherWidget{
 		$apiKey = isset($_options['apiKey']) ? $_options['apiKey'] : '';
 		switch($method){
 			case 'fetch_location':	
-				$query = isset($_data['set_location']) ? sanitize_text_field($_data['set_location']) : 'Brookvale, NSW';			
-				$_url =  'http://api.openweathermap.org/geo/1.0/direct?q='.$query.'&limit=20&appid='.$apiKey;
-				$api = isset($_data['apiKey']) ? $_data['apiKey'] : $apiKey;			
+				$query = isset($_data['set_location']) ? sanitize_text_field($_data['set_location']) : 'Brookvale, NSW';
+				$api = isset($_data['apiKey']) ? $_data['apiKey'] : $apiKey;						
+				$_url =  'http://api.openweathermap.org/geo/1.0/direct?q='.$query.'&limit=20&appid='.$api;				
 				$api_response = wp_remote_get($_url);	
 				$locations = json_decode( wp_remote_retrieve_body($api_response ),true);
 				$response['status'] = 1;
 				if(!empty($locations)){
-					$response['data'] = $locations;					
-					$response['message'] = "Found ".count($locations).' items';
+					if(isset($locations['cod']) && $locations['cod'] == '401'){
+						$response['error'] = 1;
+						$response['message'] = $locations['message'];			
+					}else{
+						$response['data'] = $locations;					
+						$response['message'] = "Found ".count($locations).' items';	
+					}
 				}
+				$info = CustomWeatherWidget::get_weather_details(1);
 				break;
 			case 'fetch_weather':				
 				break;			
@@ -142,7 +149,8 @@ Class CustomWeatherWidget{
 	public static function weather_widget_setup(){
 
 		if(isset($_REQUEST['tsiwigdget_setting'])){
-			update_option('tsiwigdget_options',serialize($_REQUEST));		
+			update_option('tsiwigdget_options',serialize($_REQUEST));
+			CustomWeatherWidget::get_weather_details(1);			
 			echo '<script type="text/javascript">					
 					window.location.reload();
 				</script>';			
