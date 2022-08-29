@@ -17,11 +17,10 @@ jQuery(document).ready(function($){
 		$('input.val_lat').val($(this).data('lat'));
 		$('input.val_lan').val($(this).data('lon'));
 	});
-
 	
 	ajax_actions = function(Object){ 	
 		jQuery.ajax({
-			url: ajaxurl, // this is the object instantiated in wp_localize_script function
+			url: ajaxurl,
 			type: 'POST',		
 			dataType:'json',
 			data: Object,

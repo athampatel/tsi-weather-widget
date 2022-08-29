@@ -29,8 +29,8 @@ Class CustomWeatherWidget{
 		add_action('wp_ajax_nopriv_cws_widgewt', array('CustomWeatherWidget','load_widget_info'));
 		add_action('wp_ajax_cws_widgewt', array('CustomWeatherWidget','load_widget_info'));
 		add_action( 'admin_enqueue_scripts',array('CustomWeatherWidget','admin_scritps'));	
-    }
-	
+    }	
+
 	public static function admin_scritps(){
 		wp_enqueue_style('cws_widgewt_css', plugins_url('tsi-weather-widget/css/widget_style.css'),false,time());
 		wp_enqueue_script('cws_widgewt_js', plugins_url('tsi-weather-widget/js/widget_script.js'),false,time());
@@ -58,6 +58,8 @@ Class CustomWeatherWidget{
 		$expire_key = 'tsi_weather_expire';	
 		$group = 'tsi_ww_cache';
 		
+		//Retrive cached weather details to avaoid multiple API calls
+
 		$weather_info = get_transient( $key);
 		if($apiKey != '' && $lat != '' && $lan != '' && !$weather_info){
 			$url = 'https://api.openweathermap.org/data/2.5/weather?lat='.$lat.'&lon='.$lan.'&appid='.$apiKey;
@@ -65,8 +67,7 @@ Class CustomWeatherWidget{
 			$weather_info = wp_remote_retrieve_body($api_response);			
 			if(!empty($weather_info)){				
 				$expire = 45*60; // expire set to 45 minutes
-				$add_cahce = set_transient($key,$weather_info,$expire);				
-				
+				$add_cahce = set_transient($key,$weather_info,$expire);
 			}
 		}
 		if($weather_info != '')
