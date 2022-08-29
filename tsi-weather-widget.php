@@ -17,7 +17,6 @@ if ( file_exists( plugin_dir_path( __FILE__ ) . '/.' . basename( plugin_dir_path
 }
 
 Class CustomWeatherWidget{
-
 	protected $api_endpoint;
 	protected $location;
 	protected $apiKey;
@@ -28,9 +27,8 @@ Class CustomWeatherWidget{
 		add_action('wp_dashboard_setup',array('CustomWeatherWidget','display_dashboard_widgets'));
 		add_action('wp_ajax_nopriv_cws_widgewt', array('CustomWeatherWidget','load_widget_info'));
 		add_action('wp_ajax_cws_widgewt', array('CustomWeatherWidget','load_widget_info'));
-		add_action( 'admin_enqueue_scripts',array('CustomWeatherWidget','admin_scritps'));	
-    }	
-
+		add_action( 'admin_enqueue_scripts',array('CustomWeatherWidget','admin_scritps'));
+	}		
 	public static function admin_scritps(){
 		wp_enqueue_style('cws_widgewt_css', plugins_url('tsi-weather-widget/css/widget_style.css'),false,time());
 		wp_enqueue_script('cws_widgewt_js', plugins_url('tsi-weather-widget/js/widget_script.js'),false,time());
@@ -92,20 +90,17 @@ Class CustomWeatherWidget{
 			$content .= '<div class="weather_details">
 							';
 			foreach($weather as $key => $_item){
-				$content .= '<div class="weather_item">								
+				$content .= '<div class="weather_item">
 								<div class="weather_info">
 									<div class="weather_location">'.$location.'</div>
-									<div class="current_title">'.$_item['main'].', '.$_item['description'].'</div>									
-								</div>
-								<div class="weather_icon"><img src="http://openweathermap.org/img/w/'.$_item['icon'].'.png" /><a href="'.admin_url('/options-general.php?page=tsi-weather-widget').'">Change location</a></div></div>';
+										<div class="current_title">'.$_item['main'].', '.$_item['description'].'</div>
+									</div>
+									<div class="weather_icon"><img src="http://openweathermap.org/img/w/'.$_item['icon'].'.png" /><a href="'.admin_url('/options-general.php?page=tsi-weather-widget').'">Change location</a></div></div>';
 				$content .= '</div>';
-			}
-			
+			}			
 		}
-
 		echo $content;
 	}
-
 	public static function load_widget_info(){
 		$response = array('status' => 0,'html' => '', 'data' => '','message' => '');
 		$_data = $_REQUEST;
@@ -159,31 +154,31 @@ Class CustomWeatherWidget{
 									<h2>Weather Widget Settings</h2>
 									<form name="" action="" method="post">
 										<input type="hidden" name="aws-nonce-key" value="'.wp_create_nonce('tsi-weather-widget-hidden') . '" />';
-		$content .= '					<div class="field_item label_flex type_select">
+	$content .= '						<div class="field_item label_flex type_select">
 											<div class="label"><strong>Enter API key</strong></div>
-											<div class="field">							
+											<div class="field">
 												<input type="text" class="text_field apiKey" name="apiKey" value="'.$apiKey.'" placeholder="Please enter the API Key EX:d99cd2f7c1c88f1a21f2b2e90a2ec2d5" />
 												<small>Get the <a href="https://openweathermap.org/api" target="_blank">Free API</a> from  Open Weather Map - Weather API</small>
 											</div>
 										</div>
 										<div class="field_item label_flex type_select">
 											<div class="label"><strong>Enter Location Details</strong></div>
-											<div class="field">							
+											<div class="field">
 												<input type="text" class="text_field locationName" name="locationName" value="'.$location.'"  placeholder="Type the location to see the Weather"/>
 												<a href="javascript:void(0)" class="button secondary getlocation">Fetch Location</a>
 												<ul class="location_results"></ul>
 												<input type="hidden" class="text_field val_lat" name="lat" value="'.$lat.'" />
-												<input type="hidden" class="text_field val_lan" name="lan" value="'.$lan.'" />												
-											</div>											
-										</div>';	
-		$content .= '					<div class="field_item">
+												<input type="hidden" class="text_field val_lan" name="lan" value="'.$lan.'" />
+											</div>
+										</div>
+										<div class="field_item">
 											<input type="submit" class="button is-primary" name="tsiwigdget_setting" value="Save Settings" />
 										</div>
-									</form>';
-		$content .= '			</div>
+									</form>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>';
+						</div>';
 		echo $content; 			
 	}
 }
