@@ -1,8 +1,20 @@
+Setup notes
+============
+You need to create an account in https://api.openweathermap.org and Generate API Key.
+
+
+Any work left in progress
+========================
 
 Technical decisions made
 ==========================================================
 We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache objects. Limited expiry time to 45 mins as mentioned
 
+
+A short paragraph outlining your thoughts on the test
+=====================================================
+We used to work with the Visual Code Editor mostly uses the tab for alignment.
+With PHPCS Tool really help to check & fix issue and make the code compatible.
 
 Description:
 ==============
@@ -26,4 +38,4 @@ Plugins Screen
 
 Time to Complete
 =================
-It takes about 4 hours.
+It takes about 2 hours.
