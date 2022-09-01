@@ -7,7 +7,7 @@ jQuery(document).ready(function($){
 		if(api.trim() == ''){				
 			html = '<li><div class="notice notice-error">Please enter the valid API key</div></li>';			
 			$('ul.location-results').html(html);
-		}else if(_api.trim() == ''){	
+		}else if(api.trim() == ''){	
 			html = '<li><div class="notice notice-error">Please enter the valid location</div></li>';			
 			$('ul.location-results').html(html);
 		}else{
@@ -23,6 +23,7 @@ jQuery(document).ready(function($){
 		$('input.locationName').val($(this).text());
 		$('input.val-lat').val($(this).data('lat'));
 		$('input.val-lan').val($(this).data('lon'));
+		$('input.val-name').val($(this).data('name'));
 	});
 	
 	ajax_actions = function(Object){ 	
@@ -38,12 +39,12 @@ jQuery(document).ready(function($){
 					 var locations = res.data;
 					 var responseString = '';
 					 if(res.error == 1){
-						responseString = '<li><div class="notice notice-error">'+res.message+'</div></li>';
+						responseString = '<li><div class="notice notice-error">' + res.message + '</div></li>';
 					 }else if(locations.length == 0){						 
 						responseString = '<li><div class="notice notice-error">Invalid location or city name</div></li>';
 					 }else{
 						 jQuery.each(locations,function(key,location){
-							responseString += '<li><a href="javascript:void(0)" class="location_item" data-lat="'+location.lat+'" data-lon="'+location.lon+'">'+location.name+', '+location.state+', '+location.country+'</a></li>';
+							responseString += '<li><a href="javascript:void(0)" class="location-item" data-lat="'+location.lat+'" data-lon="' + location.lon + '" data-name="' + location.name+'">' + location.name + ', ' + location.state + ', ' + location.country + '</a></li>';
 						 });
 					 }
 					 if(responseString != ''){

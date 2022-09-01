@@ -1,5 +1,5 @@
-Setup notes
-============
+###Setup notes###
+
 You need to create an account in https://api.openweathermap.org and Generate API Key.
 
 
