@@ -10,7 +10,7 @@
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	margin-bottom: 1em;
+	margin-bottom: 2em;
 }
 
 .setting-area .field-item .text-field,
@@ -18,7 +18,7 @@
 	width: 100%;
 	padding: 0.5rem;
 	font-size: 1rem;
-	margin: 0 0px 0.5em;
+	margin: 0px;
 }
 
 .setting-area .field-item .label {
@@ -32,8 +32,13 @@
 
 .setting-area .field-item .field {
 	width: 100%;
+    position: relative;
 }
-
+.setting-area .field-item .field .field-instruction{
+    position:absolute;
+    bottom:-2em;
+    left: 0px;
+}
 .locationresults {
 	display: none;
 }

@@ -37,11 +37,7 @@ Copyright 2005-2015 Automattic, Inc.
 define('TSIWW_OPTIONKEY', 'tsiwigdget_options');
 define('TSIWW_INFOKEY', 'tsi_weather_info');
 define('TSIWW_EXPIRE', 45);
-$plugin_base = basename(plugin_dir_path(__FILE__)).'.php';
 
-if (file_exists(plugin_dir_path(__FILE__).'/.'.$plugin_base)) {
-    include_once plugin_dir_path(__FILE__).'/.'.$plugin_base;
-}
 /**
  * CustomWeatherWidget Class Doc Comment
  * 
@@ -160,18 +156,20 @@ class CustomWeatherWidget
     /**
      * Implements deactivationHook().
      *
-     * On deactivation has .
+     * Clear active transient used to store weather information
      *
      * @return void
      */
     public static function deactivationHook()
     {
-        return true;
+        if(!get_transient(TSIWW_INFOKEY)) :
+            delete_transient(TSIWW_INFOKEY);
+        endif;
     }
     /**
      * Implements uninstallHook().
      *
-     * On deactivation.
+     * On deactivation delete the option.
      *
      * @return void
      */
@@ -184,7 +182,7 @@ class CustomWeatherWidget
     /**
      * Implements setupMenu().
      *
-     * Plugin settings menu initialization
+     * Plugin settings menu action add_options_page
      *
      * @return void
      */
@@ -218,7 +216,7 @@ class CustomWeatherWidget
     /**
      * Implements getWeatherDetails().
      *
-     * Function used to process the API
+     * Function used to get detaild from the api.openweathermap.org API
      * 
      * @param boolean $fetch used to update the weather details on location changed, Default is false
      *   
@@ -256,7 +254,7 @@ class CustomWeatherWidget
     /**
      * Implements weatherWidget().
      *
-     * Function to get the Weather information and show in widget
+     * Function to show the weather information fetched and stored from API.
      *
      * @return void
      */
@@ -268,7 +266,7 @@ class CustomWeatherWidget
         $wind = isset($info['wind']) ? $info['wind'] : null;
         $clouds = isset($info['clouds']) ? $info['clouds'] : null;
         $content = '';
-        $_options = get_option('tsiwigdget_options');
+        $_options = get_option(TSIWW_OPTIONKEY);
         if ($_options != '') {
             $_options = unserialize($_options);
         }
@@ -300,7 +298,7 @@ class CustomWeatherWidget
     /**
      * Implements loadWidgetInfo().
      *
-     * Function used for AJAX call
+     * Get the location details from the ajax call
      *
      * @return void
      */
@@ -351,7 +349,7 @@ class CustomWeatherWidget
     /**
      * Implements weatherWidgetSetup().
      *
-     * Plugin settings for adding API key and change location
+     * Plugins setting area to add API key and setup the location to fetch the details
      *
      * @return void
      */
@@ -384,14 +382,14 @@ class CustomWeatherWidget
                                 <div class="label"><strong>Enter API key</strong></div>
                                 <div class="field">
                                     <input type="text" class="text-field apiKey" name="apiKey" value="<?php echo sanitize_text_field($apiKey) ?>" placeholder="Please enter the open weather map api key" />
-                                    <small>Get the <a href="https://openweathermap.org/api" target="_blank">Free API</a> from  Open Weather Map API</small>
+                                    <small class="field-instruction">Get the <a href="https://openweathermap.org/api" target="_blank">Free API</a> from  Open Weather Map API</small>
                                 </div>
                             </div>
                             <div class="field-item label-flex type-text">
                                 <div class="label"><strong>Enter Location Details</strong></div>
                                 <div class="field">
                                     <input type="text" class="text-field locationName" name="locationName" value="<?php echo sanitize_text_field($location) ?>"  placeholder="Type the location to see the Weather"/>
-                                    <a href="javascript:void(0)" class="button secondary getlocation">Fetch Location</a>
+                                    <a href="javascript:void(0)" class="button secondary getlocation field-instruction">Fetch Location</a>
                                     <ul class="location-results"></ul>
                                     <input type="hidden" class="text-field val-lat" name="lat" value="<?php echo sanitize_text_field($lat) ?>" />
                                     <input type="hidden" class="text-field val-lan" name="lan" value="<?php echo sanitize_text_field($lan) ?>" />
@@ -409,4 +407,3 @@ class CustomWeatherWidget
     }
 }
 $WeatherWidget = new CustomWeatherWidget();
-
