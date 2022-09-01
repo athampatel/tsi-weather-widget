@@ -1,4 +1,6 @@
-# Setup notes #
+## TSI Weather Widget ##
+
+### Setup notes ###
 
 Need to create an account with https://api.openweathermap.org to Generate API Key.
 
