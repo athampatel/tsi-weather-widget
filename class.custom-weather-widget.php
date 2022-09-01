@@ -194,29 +194,27 @@ class CustomWeatherWidget
     public static function getWeatherDetails($fetch = 0)
     {
         $_options = get_option(TSIWW_OPTIONKEY);
-        if ($_options != '') {
+        if ($_options != '') :
             $_options = unserialize($_options);
-        }
+        endif;
         $apiKey = isset($_options['apiKey']) ? $_options['apiKey'] : 'd99cd2f7c1c88f1a21f2b2e90a2ec2d5';
         $lat = isset($_options['lat']) ? $_options['lat'] : '-33.7629';
         $lan = isset($_options['lan']) ? $_options['lan'] : '151.2707';
         $weather_info = '';
-
         //Retrive cached weather details to avaoid multiple API calls
         $weather_info = ($fetch) ? 0 : get_transient(TSIWW_INFOKEY);
-
-        if ($apiKey != '' && $lat != '' && $lan != '' && !$weather_info) {
+        if ($apiKey != '' && $lat != '' && $lan != '' && !$weather_info) :
             $url = 'https://api.openweathermap.org/data/2.5/weather?lat=' . $lat . '&lon=' . $lan . '&units=metric&appid=' . $apiKey;
             $api_response = wp_remote_get($url);
             $weather_info = wp_remote_retrieve_body($api_response);
-            if (!empty($weather_info)) {
+            if (!empty($weather_info)) :
                 $expire = TSIWW_EXPIRE * 60; // expire set to 45 minutes
                 $add_cahce = set_transient(TSIWW_INFOKEY, $weather_info, $expire);
-            }
-        }
-        if ($weather_info != '') {
+            endif;
+        endif;
+        if ($weather_info != '') :
               $weather_info = json_decode($weather_info, true);
-        }
+        endif;
 
         return $weather_info;
     }
@@ -233,11 +231,11 @@ class CustomWeatherWidget
         $weather = isset($info['weather']) ? $info['weather'] : null;
         $main = isset($info['main']) ? $info['main'] : null;        
         $_options = get_option(TSIWW_OPTIONKEY);
-        if ($_options != '') {
+        if ($_options != '') :
             $_options = unserialize($_options);
-        }
+        endif;
         $location = isset($_options['location']) ? $_options['location'] : $info['name'];
-        if (!empty($weather)) { ?>
+        if (!empty($weather)) : ?>
             <div class="weather-details">
             <?php
             foreach($weather as $key => $_item):
@@ -257,7 +255,7 @@ class CustomWeatherWidget
                 </div>
                 <?php
             endforeach;
-        }
+        endif;
 
     }
     /**
@@ -279,20 +277,18 @@ class CustomWeatherWidget
         $_data = $_REQUEST;
         $method = $_data['method'];
         $_options = get_option(TSIWW_OPTIONKEY);
-        if ($_options != '') {
+        if ($_options != '') :
             $_options = unserialize($_options);
-        }
+        endif;
         $apiKey = isset($_options['apiKey']) ? $_options['apiKey'] : '';
 
-        switch ($method)        {
+        switch ($method) :
         case 'fetch_location':
             $query = isset($_data['set_location']) ? sanitize_text_field($_data['set_location']) : 'Brookvale, NSW';
             $api = isset($_data['apiKey']) ? $_data['apiKey'] : $apiKey;
             $_url = 'http://api.openweathermap.org/geo/1.0/direct?q=' . $query . '&limit=20&appid=' . $api;
             $api_response = wp_remote_get($_url);
             $locations = json_decode(wp_remote_retrieve_body($api_response), true);
-
-
             $response['status'] = 1;
             if(!empty($locations)) :
                 if(isset($locations['cod']) && $locations['cod'] == '401') :
@@ -307,7 +303,7 @@ class CustomWeatherWidget
             break;        
         default:
             break;
-        }
+        endswitch;
         wp_send_json($response);
         wp_die();
     }
@@ -337,7 +333,6 @@ class CustomWeatherWidget
         $lan = isset($_options['lan']) ? $_options['lan'] : ''; 
         $location = isset($_options['location']) ? $_options['location'] : ''; 
         ?> 
-
         <div class="metabox-holder setting-area">
             <div id="post-body">
                 <div id="post-body-content">
