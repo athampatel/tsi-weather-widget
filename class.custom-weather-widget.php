@@ -1,5 +1,17 @@
 <?php
 /**
+ * Custom Weather Widget Class file
+ *  
+ * @file
+ * @category  Class
+ * Custom Weather Widget Class
+ * @package   TSIWeatherWidget
+ * @author    Tender Software <info@tendersoftware.in>
+ * @copyright 2022 Tender Software 
+ * @license   GPL-2.0+ 
+ * @link      https://tendersoftware.com/ 
+ */
+/**
  * CustomWeatherWidget Class Doc Comment
  * 
  * Custom Weather Widget to retrieve application wide
@@ -16,9 +28,6 @@
  */
 class CustomWeatherWidget
 {
-    protected $location;
-    protected $apiKey;
-    protected $name;
     /**
      * Implements __construct().
      *
@@ -222,9 +231,7 @@ class CustomWeatherWidget
     {
         $info = CustomWeatherWidget::getWeatherDetails();
         $weather = isset($info['weather']) ? $info['weather'] : null;
-        $main = isset($info['main']) ? $info['main'] : null;
-        $wind = isset($info['wind']) ? $info['wind'] : null;
-        $clouds = isset($info['clouds']) ? $info['clouds'] : null;        
+        $main = isset($info['main']) ? $info['main'] : null;        
         $_options = get_option(TSIWW_OPTIONKEY);
         if ($_options != '') {
             $_options = unserialize($_options);
