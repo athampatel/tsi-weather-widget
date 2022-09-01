@@ -5,6 +5,7 @@ Need to create an account with https://api.openweathermap.org to Generate API Ke
 
 ### Any work left in progress ###
 
+Completed all the metioned items except usage of wp_cache methods
 
 
 ### Technical decisions made ###
@@ -14,8 +15,7 @@ We used to store the Settings option and results details into set_transient and 
 
 ### A short paragraph outlining your thoughts on the test ###
 
-We used to work with the Visual Code Editor mostly uses the tab for alignment.
-With PHPCS Tool really help to check & fix issue and make the code compatible.
+With PHPCS Tool really help to check & fix issue and maintain the WordPress code standards.
 
 ### Description: ###
 

@@ -32,12 +32,12 @@
 
 .setting-area .field-item .field {
 	width: 100%;
-    position: relative;
+	position: relative;
 }
 .setting-area .field-item .field .field-instruction{
-    position:absolute;
-    bottom:-2em;
-    left: 0px;
+	position:absolute;
+	bottom:-2em;
+	left: 0px;
 }
 .locationresults {
 	display: none;

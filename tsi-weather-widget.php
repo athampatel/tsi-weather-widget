@@ -1,14 +1,14 @@
 <?php
 /**
  *  * TSI Weather Widget
- 
+ * 
  * @category  Wordpress-plugin
  * @package   TSIWeatherWidget
  * @author    Tender Software <info@tendersoftware.in>
  * @copyright 2022 Tender Software
- * @license   GPL-2.0+ 
+ * @license   GPL-2.0+
  * @link      https://tendersoftware.com/
- * 
+ *
  * @wordpress-plugin
  * Plugin Name: TSI Weather Widget
  * Plugin URI: https://tendersoftware.com/
@@ -17,7 +17,9 @@
  * Version: 1.0.0
  * Author URI: https://tendersoftware.com/
  */
+
 /*
+*
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -34,8 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 Copyright 2005-2015 Automattic, Inc.
 */
-define('TSIWW_OPTIONKEY', 'tsiwigdget_options');
-define('TSIWW_INFOKEY', 'tsi_weather_info');
-define('TSIWW_EXPIRE', 45);
-require_once 'class.custom-weather-widget.php';
-$WeatherWidget = new CustomWeatherWidget();
+define( 'TSIWW_OPTIONKEY', 'tsiwigdget_options' );
+define( 'TSIWW_INFOKEY', 'tsi_weather_info' );
+define( 'TSIWW_EXPIRE', 45 );
+require_once 'class-customweatherwidget.php';
+$weather_widget = new CustomWeatherWidget();
