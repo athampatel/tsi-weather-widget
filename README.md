@@ -38,4 +38,4 @@ Plugins Screen
 
 Time to Complete
 =================
-It takes about 2 hours.
+It takes about 6 hours.
