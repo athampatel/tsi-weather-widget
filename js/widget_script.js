@@ -1,21 +1,28 @@
 jQuery(document).ready(function($){
 	$(document.body).on('click','a.getlocation',function(e){		
 		e.preventDefault();	
-		var _api = $('input.apiKey').val();
+		var html = '';
+		var api = $('input.apiKey').val();
 		var locationName = $('input.locationName').val();
-		if(_api.trim() == ''){	
-			alert("Please enter the valid API key");
+		if(api.trim() == ''){				
+			html = '<li><div class="notice notice-error">Please enter the valid API key</div></li>';			
+			$('ul.location-results').html(html);
 		}else if(_api.trim() == ''){	
-			alert("Please enter the valid location");
+			html = '<li><div class="notice notice-error">Please enter the valid location</div></li>';			
+			$('ul.location-results').html(html);
 		}else{
-			var _obj = {set_location:locationName,method:'fetch_location',apiKey:_api,action:'cws_widgewt'};
+			var _obj = {set_location:locationName,
+				        method:'fetch_location',
+						apiKey:api,
+						action:'cws_widget'};
+						
 			ajax_actions(_obj);
 		}		
 	});
-	$(document.body).on('click','ul.location_results a.location_item',function(e){	
+	$(document.body).on('click','ul.location-results a.location-item',function(e){	
 		$('input.locationName').val($(this).text());
-		$('input.val_lat').val($(this).data('lat'));
-		$('input.val_lan').val($(this).data('lon'));
+		$('input.val-lat').val($(this).data('lat'));
+		$('input.val-lan').val($(this).data('lon'));
 	});
 	
 	ajax_actions = function(Object){ 	
@@ -25,22 +32,22 @@ jQuery(document).ready(function($){
 			dataType:'json',
 			data: Object,
 			beforeSend: function( data ){
-
+				$('ul.location-results').html('');
 			},success: function( res ){
 				if(res.status == 1 && Object.method == 'fetch_location'){
 					 var locations = res.data;
-					 var _html = '';
+					 var responseString = '';
 					 if(res.error == 1){
-						_html = '<li><div class="notice notice-error">'+res.message+'</div></li>';
+						responseString = '<li><div class="notice notice-error">'+res.message+'</div></li>';
 					 }else if(locations.length == 0){						 
-						_html = '<li><div class="notice notice-error">Invalid location or city name</div></li>';
+						responseString = '<li><div class="notice notice-error">Invalid location or city name</div></li>';
 					 }else{
 						 jQuery.each(locations,function(key,location){
-							_html += '<li><a href="javascript:void(0)" class="location_item" data-lat="'+location.lat+'" data-lon="'+location.lon+'">'+location.name+', '+location.state+', '+location.country+'</a></li>';
+							responseString += '<li><a href="javascript:void(0)" class="location_item" data-lat="'+location.lat+'" data-lon="'+location.lon+'">'+location.name+', '+location.state+', '+location.country+'</a></li>';
 						 });
 					 }
-					 if(_html != ''){
-						$('ul.location_results').html(_html);
+					 if(responseString != ''){
+						$('ul.location-results').html(responseString);
 					 }
 				}
 			},complete:function(data){			

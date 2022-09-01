@@ -4,7 +4,6 @@ Technical decisions made
 We used to store the Settings option and results details into set_transient and get_transient methods instead of wp_cache objects. Limited expiry time to 45 mins as mentioned
 
 
-
 Description:
 ==============
 WordPress admin dashboard Weather Widget Plugins uses https://api.openweathermap.org API to fetch the location and the weather details. The Plugins menu can be found in the WordPress Settings Menu tab where the location can be changed.
@@ -22,7 +21,7 @@ Plugins Screen
 		https://prnt.sc/_74RPCBby2Wc
 		
 	2. Admin Dashboard Widget Screen
-		https://prnt.sc/efcqzMqPC2le	
+		https://prnt.sc/BIPoq8IcaGth	
 	
 
 Time to Complete

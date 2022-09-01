@@ -1,67 +1,74 @@
-.metabox-holder.setting_area .postbox{
-    padding:1em 2em;
-    float: left;
-    width:100%;
-    max-width: 75em;
-}
-.setting_area .field_item{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;    
-    width: 100%;
-    margin-bottom: 1em;
+.metabox-holder.setting-area .postbox {
+	padding: 1em 2em;
+	float: left;
+	width: 100%;
+	max-width: 75em;
 }
 
-.setting_area .field_item  .text_field,.setting_area .field_item select{
-	width:100%;
-	padding:0.5rem;
-	font-size:1rem;
-	margin:0 0px 0.5em;
+.setting-area .field-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 1em;
 }
-.setting_area .field_item .label{
-	color:#000;
-	font-size:0.925rem;
-	line-height:1.4rem;
-	margin-right:0.725rem;
-	position:relative;
-	min-width:200px;
+
+.setting-area .field-item .text-field,
+.setting-area .field-item select {
+	width: 100%;
+	padding: 0.5rem;
+	font-size: 1rem;
+	margin: 0 0px 0.5em;
 }
-.setting_area .field_item .field{
-    width: 100%;
+
+.setting-area .field-item .label {
+	color: #000;
+	font-size: 0.925rem;
+	line-height: 1.4rem;
+	margin-right: 0.725rem;
+	position: relative;
+	min-width: 200px;
 }
-.locationresults{
-    display: none;
+
+.setting-area .field-item .field {
+	width: 100%;
 }
-.weather_details,.weather_item{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width:100%;
+
+.locationresults {
+	display: none;
 }
-.weather_item .weather_icon{
-	 display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-	align-items:flex-end;
+
+.weather-details,
+.weather-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
 }
-.weather_item .weather_icon img{
-	width:5em;
+
+.weather-item .weather-icon {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
 }
-.weather_location{
-    font-size: 1.5em;
-    font-weight: bold;
+
+.weather-item .weather-icon img {
+	width: 5em;
 }
-.weather_item .weather_icon  a{
-    font-size: 0.825em;
-    color: #000;
-    text-decoration: none;
+
+.weather-location {
+	font-size: 1.5em;
+	font-weight: bold;
 }
-.weather_temp{
-    display: flex;
-    flex-direction: column;
-    margin-top:10px;
+
+.weather-temp {
+	display: flex;
+	flex-direction: column;
+	margin-top: 10px;
 }
-.location_results .notice{
-    margin: 0px;
-    padding: 15px;
+
+.location-results .notice {
+	margin: 0px;
+	padding: 15px;
 }
