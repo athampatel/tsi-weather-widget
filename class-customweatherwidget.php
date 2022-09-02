@@ -28,13 +28,13 @@
  * @since 1.0.1
  */
 class CustomWeatherWidget {
-	
+
 	/**
 	 * Implements __construct().
 	 *
 	 * CustomWeatherWidget constructor
 	 */
-	public function __construct() {		
+	public function __construct() {
 		register_activation_hook(
 			__FILE__,
 			array(
@@ -104,12 +104,13 @@ class CustomWeatherWidget {
 	 */
 	public static function admin_scritps() {
 		wp_enqueue_style( 'cws_widget_css', plugins_url( 'tsi-weather-widget/css/widget_style.css' ), false, time() );
-		wp_enqueue_script( 'cws_widget_js', plugins_url( 'tsi-weather-widget/js/widget_script.js' ), false, time() );
+		wp_enqueue_script( 'cws_widget_js', plugins_url( 'tsi-weather-widget/js/widget_script.js' ), false, time(), true );
 		wp_localize_script(
+			'cws_widget_js',
 			'cws_widget',
-			'cws_widgewt',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php?action=cws_widget' ),
+				'ajax_url'  => admin_url( 'admin-ajax.php?action=cws_widget' ),
+				'tsi_nonce' => wp_create_nonce( 'tsi-nonce' ),
 			)
 		);
 
@@ -122,7 +123,7 @@ class CustomWeatherWidget {
 	 * @return void
 	 */
 	public static function activation_hook() {
-		$value = serialize( array() );
+		$value = wp_json_encode( array() );
 		if ( ! get_option( TSIWW_OPTIONKEY ) ) :
 			add_option( TSIWW_OPTIONKEY, $value );
 		endif;
@@ -199,16 +200,16 @@ class CustomWeatherWidget {
 	 */
 	public static function get_weather_details( $fetch = 0 ) {
 		$_options = get_option( TSIWW_OPTIONKEY );
-		if ( '' != $_options ) {
-			$_options = unserialize( $_options );
-		}
-		$api_key      = isset( $_options['apiKey'] ) ? $_options['apiKey'] : 'd99cd2f7c1c88f1a21f2b2e90a2ec2d5';
+		if ( '' !== $_options ) :
+			$_options = json_decode( $_options, true );
+		endif;
+		$api_key      = isset( $_options['api_key'] ) ? $_options['api_key'] : 'd99cd2f7c1c88f1a21f2b2e90a2ec2d5';
 		$lat          = isset( $_options['lat'] ) ? $_options['lat'] : '-33.7629';
 		$lan          = isset( $_options['lan'] ) ? $_options['lan'] : '151.2707';
 		$weather_info = '';
 		// Retrive cached weather details to avaoid multiple API calls.
 		$weather_info = ( $fetch ) ? 0 : get_transient( TSIWW_INFOKEY );
-		if ( '' != $api_key && '' != $lat && '' != $lan && ! $weather_info ) :
+		if ( '' !== $api_key && '' !== $lat && '' !== $lan && ! $weather_info ) :
 			$url          = 'https://api.openweathermap.org/data/2.5/weather?lat=' . $lat . '&lon=' . $lan . '&units=metric&appid=' . $api_key;
 			$api_response = wp_remote_get( $url );
 			$weather_info = wp_remote_retrieve_body( $api_response );
@@ -217,8 +218,8 @@ class CustomWeatherWidget {
 				$add_cahce = set_transient( TSIWW_INFOKEY, $weather_info, $expire );
 			endif;
 		endif;
-		if ( '' != $weather_info ) :
-			  $weather_info = json_decode( $weather_info, true );
+		if ( '' !== $weather_info ) :
+			$weather_info = json_decode( $weather_info, true );
 		endif;
 
 		return $weather_info;
@@ -235,8 +236,8 @@ class CustomWeatherWidget {
 		$weather  = isset( $info['weather'] ) ? $info['weather'] : null;
 		$main     = isset( $info['main'] ) ? $info['main'] : null;
 		$_options = get_option( TSIWW_OPTIONKEY );
-		if ( '' != $_options ) :
-			$_options = unserialize( $_options );
+		if ( '' !== $_options ) :
+			$_options = json_decode( $_options, true );
 		endif;
 		$location = isset( $_options['location'] ) ? $_options['location'] : $info['name'];
 		if ( ! empty( $weather ) ) : ?>
@@ -270,43 +271,48 @@ class CustomWeatherWidget {
 	 * @return void
 	 */
 	public static function load_widget_nfo() {
-		$response = array(
+		$response  = array(
 			'status'  => 0,
 			'html'    => '',
 			'data'    => '',
 			'message' => '',
 			'error'   => 0,
 		);
-		$_data    = $_REQUEST;
-		$method   = $_data['method'];
-		$_options = get_option( TSIWW_OPTIONKEY );
-		if ( '' != $_options ) :
-			$_options = unserialize( $_options );
-		endif;
-		$api_key = isset( $_options['apiKey'] ) ? $_options['apiKey'] : '';
+		$tsi_nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 
-		switch ( $method ) :
-			case 'fetch_location':
-				$query              = isset( $_data['set_location'] ) ? sanitize_text_field( $_data['set_location'] ) : 'Brookvale, NSW';
-				$api                = isset( $_data['apiKey'] ) ? $_data['apiKey'] : $api_key;
-				$_url               = 'http://api.openweathermap.org/geo/1.0/direct?q=' . $query . '&limit=20&appid=' . $api;
-				$api_response       = wp_remote_get( $_url );
-				$locations          = json_decode( wp_remote_retrieve_body( $api_response ), true );
-				$response['status'] = 1;
-				if ( ! empty( $locations ) ) :
-					if ( isset( $locations['cod'] ) && '401' == $locations['cod'] ) :
-						$response['error']   = 1;
-						$response['message'] = $locations['message'];
-					else :
-						$response['data']    = $locations;
-						$response['message'] = 'Found ' . count( $locations ) . ' items';
+		if ( wp_verify_nonce( $tsi_nonce, 'tsi-nonce' ) ) {
+
+			$_data    = $_REQUEST;
+			$method   = $_data['method'];
+			$_options = get_option( TSIWW_OPTIONKEY );
+			if ( '' !== $_options ) :
+				$_options = json_decode( $_options, true );
+			endif;
+			$api_key = isset( $_options['api_key'] ) ? $_options['api_key'] : '';
+
+			switch ( $method ) :
+				case 'fetch_location':
+					$query              = isset( $_data['set_location'] ) ? sanitize_text_field( $_data['set_location'] ) : 'Brookvale, NSW';
+					$api                = isset( $_data['api_key'] ) ? $_data['api_key'] : $api_key;
+					$_url               = 'http://api.openweathermap.org/geo/1.0/direct?q=' . $query . '&limit=20&appid=' . $api;
+					$api_response       = wp_remote_get( $_url );
+					$locations          = json_decode( wp_remote_retrieve_body( $api_response ), true );
+					$response['status'] = 1;
+					if ( ! empty( $locations ) ) :
+						if ( isset( $locations['cod'] ) && '401' === $locations['cod'] ) :
+							$response['error']   = 1;
+							$response['message'] = $locations['message'];
+						else :
+							$response['data']    = $locations;
+							$response['message'] = 'Found ' . count( $locations ) . ' items';
+						endif;
 					endif;
-				endif;
-				$info = self::get_weather_details( 1 );
-				break;
-			default:
-				break;
-		endswitch;
+					$info = self::get_weather_details( 1 );
+					break;
+				default:
+					break;
+			endswitch;
+		}
 		wp_send_json( $response );
 		wp_die();
 	}
@@ -318,35 +324,40 @@ class CustomWeatherWidget {
 	 * @return void
 	 */
 	public static function weather_widget_setup() {
+
 		if ( isset( $_REQUEST['tsiwigdget_setting'] ) ) :
-			update_option( TSIWW_OPTIONKEY, serialize( $_REQUEST ) );
-			self::get_weather_details( 1 );
+			$status    = 0;
+			$tsi_nonce = isset( $_REQUEST['tsiww_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tsiww_nonce'] ) ) : '';
+			if ( wp_verify_nonce( $tsi_nonce, 'tsi_widget' ) ) :
+				update_option( TSIWW_OPTIONKEY, wp_json_encode( $_REQUEST ) );
+				self::get_weather_details( 1 );
+				$status = 1;
+			endif;
 			echo '<script type="text/javascript">					
-					window.location.reload();
+					window.loocation.href = ' . esc_html( admin_url( 'admin-ajax.php?action=tsi-weather-widget&status=' . $status ) ) . '
 				</script>';
 		endif;
 		$_options = get_option( TSIWW_OPTIONKEY );
-		if ( '' != $_options ) {
-			$_options = unserialize( $_options );
+		if ( '' !== $_options ) {
+			$_options = json_decode( $_options, true );
 		}
-		$api_key       = isset( $_options['apiKey'] ) ? $_options['apiKey'] : '';
+		$api_key       = isset( $_options['api_key'] ) ? $_options['api_key'] : '';
 		$location_name = isset( $_options['locationName'] ) ? $_options['locationName'] : '';
 		$lat           = isset( $_options['lat'] ) ? $_options['lat'] : '';
 		$lan           = isset( $_options['lan'] ) ? $_options['lan'] : '';
 		$location      = isset( $_options['location'] ) ? $_options['location'] : '';
 		?>
-		 
 		<div class="metabox-holder setting-area">
 			<div id="post-body">
 				<div id="post-body-content">
 					<div class="postbox">
 						<h2>Weather Widget Settings</h2>
 						<form name="" action="" method="post">
-							<input type="hidden" name="aws-nonce-key" value="' . wp_create_nonce('tsi-weather-widget-hidden') . '" />
+							<input type="hidden" name="tsiww_nonce" value="<?php echo esc_html( wp_create_nonce( 'tsi_widget' ) ); ?>" />
 							<div class="field-item label-flex type-text">
 								<div class="label"><strong>Enter API key</strong></div>
 								<div class="field">
-									<input type="text" class="text-field apiKey" name="apiKey" value="<?php echo esc_html( $api_key ); ?>" placeholder="Please enter the open weather map api key" />
+									<input type="text" class="text-field api_key" name="api_key" value="<?php echo esc_html( $api_key ); ?>" placeholder="Please enter the open weather map api key" />
 									<small class="field-instruction">Get the <a href="https://openweathermap.org/api" target="_blank">Free API</a> from  Open Weather Map API</small>
 								</div>
 							</div>
