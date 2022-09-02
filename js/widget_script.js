@@ -27,7 +27,7 @@
 				method: 'fetch_location',
 				api_key: api,
 				nonce: tsiww_nonce,
-				action: ss'cws_widget'
+				action: 'cws_widget'
 			};
 			ajax_actions( _obj );
 		}
@@ -37,7 +37,7 @@
 		$( 'input.val-lat' ).val( $( this ).data( 'lat' ) );
 		$( 'input.val-lan' ).val( $( this ).data( 'lon' ) );
 		$( 'input.val-name' ).val( $( this ).data( 'name' ) );
-	});
+	} );
 	ajax_actions = function( Object ) {
 		$.ajax( {
 			url: cws_widget.ajax_url,
@@ -63,7 +63,7 @@
 						$( 'ul.location-results' ).html( responseString );
 					}
 				}
-			}, complete: function( data ){
+			}, complete:function( data ){
 
 			}
 		} );
