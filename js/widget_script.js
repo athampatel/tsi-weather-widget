@@ -9,7 +9,7 @@
  * @link      https://tendersoftware.com/
  */
 
- jQuery( document ).ready( function( $ ) {
+( function ( $ ) {
 	$( document.body ).on( 'click' , 'a.getlocation' , function( e ) {
 		e.preventDefault();
 		var html         = '';
@@ -24,29 +24,29 @@
 			$( 'ul.location-results' ).html( html );
 		} else {
 			var _obj = {set_location:locationName,
-				method:'fetch_location',
-				api_key:api,
-				nonce:tsiww_nonce,
-				action:'cws_widget'
+				method: 'fetch_location',
+				api_key: api,
+				nonce: tsiww_nonce,
+				action: ss'cws_widget'
 			};
 			ajax_actions( _obj );
 		}
-	});
+	} );
 	$( document.body ).on( 'click' , 'ul.location-results a.location-item' , function( e ) {
 		$( 'input.locationName' ).val( $( this ).text() );
 		$( 'input.val-lat' ).val( $( this ).data( 'lat' ) );
 		$( 'input.val-lan' ).val( $( this ).data( 'lon' ) );
 		$( 'input.val-name' ).val( $( this ).data( 'name' ) );
 	});
-	ajax_actions = function( Object ){
-		$.ajax({
+	ajax_actions = function( Object ) {
+		$.ajax( {
 			url: cws_widget.ajax_url,
 			type: 'POST',
 			dataType:'json',
 			data: Object,
-			beforeSend: function( data ){
+			beforeSend: function( data ) {
 				$( 'ul.location-results' ).html( '' );
-			},success: function( res ){
+			}, success: function( res ){
 				if ( res.status === 1 && Object.method === 'fetch_location' ) {
 					var locations      = res.data;
 					var responseString = '';
@@ -63,10 +63,9 @@
 						$( 'ul.location-results' ).html( responseString );
 					}
 				}
-			},complete:function( data ){
+			}, complete: function( data ){
 
 			}
-		});
+		} );
 	};
-}
-);
+} )( jQuery );
