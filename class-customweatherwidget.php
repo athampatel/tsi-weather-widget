@@ -135,8 +135,8 @@ class CustomWeatherWidget {
 	 *
 	 * @return void
 	 */
-	public static function deactivation_ook() {
-		if ( ! get_transient( TSIWW_INFOKEY ) ) :
+	public static function deactivation_hook() {
+		if ( get_transient( TSIWW_INFOKEY ) ) :
 			delete_transient( TSIWW_INFOKEY );
 		endif;
 	}
@@ -151,6 +151,9 @@ class CustomWeatherWidget {
 		if ( get_option( TSIWW_OPTIONKEY ) ) :
 			delete_option( TSIWW_OPTIONKEY );
 		endif;
+		if ( get_option( TSIWW_INFOKEY ) ) :
+			delete_option( TSIWW_INFOKEY );
+		endif;		
 	}
 	/**
 	 * Implements setupMenu().
