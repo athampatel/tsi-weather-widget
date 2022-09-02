@@ -35,30 +35,6 @@ class CustomWeatherWidget {
 	 * CustomWeatherWidget constructor
 	 */
 	public function __construct() {
-		register_activation_hook(
-			__FILE__,
-			array(
-				$this,
-				'activation_hook',
-			)
-		);
-
-		register_deactivation_hook(
-			__FILE__,
-			array(
-				$this,
-				'deactivation_hook',
-			)
-		);
-
-		register_uninstall_hook(
-			__FILE__,
-			array(
-				$this,
-				'uninstall_hook',
-			)
-		);
-
 		add_action(
 			'admin_menu',
 			array(
@@ -122,7 +98,7 @@ class CustomWeatherWidget {
 	 *
 	 * @return void
 	 */
-	public static function activation_hook() {
+	public static function activation() {
 		$value = wp_json_encode( array() );
 		if ( ! get_option( TSIWW_OPTIONKEY ) ) :
 			add_option( TSIWW_OPTIONKEY, $value );
@@ -135,26 +111,11 @@ class CustomWeatherWidget {
 	 *
 	 * @return void
 	 */
-	public static function deactivation_hook() {
+	public static function deactivation() {
 		if ( get_transient( TSIWW_INFOKEY ) ) :
 			delete_transient( TSIWW_INFOKEY );
 		endif;
-	}
-	/**
-	 * Implements uninstallHook().
-	 *
-	 * On deactivation delete the option.
-	 *
-	 * @return void
-	 */
-	public static function uninstall_hook() {
-		if ( get_option( TSIWW_OPTIONKEY ) ) :
-			delete_option( TSIWW_OPTIONKEY );
-		endif;
-		if ( get_option( TSIWW_INFOKEY ) ) :
-			delete_option( TSIWW_INFOKEY );
-		endif;		
-	}
+	}	
 	/**
 	 * Implements setupMenu().
 	 *
